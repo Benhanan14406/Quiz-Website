@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    .buttons {
+        background-color: indianred; 
+        color: aliceblue; 
+        font-size: 150%; 
+        padding: 0.5cm; 
+        margin-top: 1cm;
+        height: fit-content;
+    }
+    
+    .buttons a {
+        color: aliceblue; 
+    }
+
+    .questions {
+        color: aliceblue; 
+        font-family: Verdana, Geneva, Tahoma, sans-serif; 
+        text-align: center; 
+        padding: 0.125cm; 
+        font-size: 100%; 
+        height: fit-content;
+        width: fit-content;
+    }
+
+    .questions a {
+        color: aliceblue;
+    }
+{% endblock %}
+
+{% block content %}
+    <h1 style = "color:aliceblue; font-family: Verdana, Geneva, Tahoma, sans-serif; text-align: left; padding-top: 2cm; font-size: 200%;">
+        <b>
+            Questions of {{ tryout }}
+        </b>
+    </h1>
+
+    <!-- tombol untuk kembali ke TryoutDetails dan berhenti membuat soal -->
+    <div class = "buttons">
+        <a href = "{% url "tryoutDetails" tryout.id %}">
+            <b>
+                Back
+            </b>
+        </a>
+    </div>
+
+    <!-- tombol untuk menambah soal -->
+    {% if tryout.workedOn == False %}
+        <div class = "buttons">
+            <a href = "{% url "questionCreationTF" tryout.id questionIndex %}">
+                <b>
+                    Add Question
+                </b>
+            </a>
+        </div>
+    {% endif %}
+
+    <p style = "color:aliceblue; font-family: Verdana, Geneva, Tahoma, sans-serif; text-align: left; margin-top: 1cm; font-size: 150%;">
+        Edit questions
+    </p>
+
+    <!-- mengecheck jumlah soal dan menampilkan masing-masing soal -->
+    {% if questions %}
+        {% for question in questions %}
+        <div class = "questions" style = "background-color: indianred; margin-top: 0.5cm; border: 1cm;">
+            {% if tryout.workedOn == False %}
+            <!-- agar soal bisa diedit -->
+                {% if question.questionType == "TF" %}
+                    <a href = "{% url "questionEditorTF" tryout.id question.id %}">
+                        <b>
+                            {{question.questionTxt }} || Answer: {{ question.answer }}
+                        </b>
+                    </a>
+                {% elif question.questionType == "MC" %}
+                    <a href = "{% url "questionEditorMC" tryout.id question.id %}">
+                        <b>
+                            {{question.questionTxt }} || Answer: {{ question.answer }}
+                        </b>
+                    </a>
+                {% else %}
+                    <a href = "{% url "questionEditorEssay" tryout.id question.id %}">
+                        <b>
+                            {{question.questionTxt }} || Answer: {{ question.answer }}
+                        </b>
+                    </a>
+                {% endif %}
+            <!-- agar soal tidak bisa diedit -->
+            {% else %}
+                {% if question.questionType == "TF" %}
+                    <b>
+                            {{question.questionTxt }} || Answer: {{ question.answer }}
+                    </b>
+                {% elif question.questionType == "MC" %}
+                    <b>
+                            {{question.questionTxt }} || Answer: {{ question.answer }}
+                    </b>
+                {% else %}
+                    <b>
+                            {{question.questionTxt }} || Answer: {{ question.answer }}
+                    </b>
+                {% endif %}
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <b class = "questions">
+            No questions made
+        </b>
+    {% endif %}
+
+{% endblock %}

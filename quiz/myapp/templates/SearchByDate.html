@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %} 
+    Search Quiz
+{% endblock %} 
+
+{% block styles %}
+    .topnav {
+        overflow: hidden;
+        background-color: darkslategrey;
+    }
+    
+    .topnav a {
+        float: left;
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        font-size: 100%%;
+        padding: 0.5cm;
+        color: aliceblue;
+    }
+    
+    .topnav a.active {
+        background-color: indianred;
+        color: aliceblue;
+    }
+
+    .topnav input[type=text] {
+        font-size: 100%;
+        background-color: indianred;
+        color: aliceblue;
+    }
+    
+    @media screen and (max-width: 600px) {
+        .topnav input[type=text] {
+            display: block;
+            text-align: left;
+            width: 100%;
+            border: 0.1cm;
+            border-color: indianred;
+            background-color: indianred;
+            color: aliceblue;  
+        }
+    }
+{% endblock %}
+
+{% block extraHead %}
+    <div class = "topnav">
+        <!-- topnav untuk mencari berdasarkan tipe lain -->
+        <a href = "{% url "searchByName" date %}" style = "color: aliceblue;">
+            Search By Quiz Name
+        </a>
+        <a href = "{% url "searchByCategory" date %}" style = "color: aliceblue;">
+            Search By Quiz Category
+        </a>
+        <a class = "active" href = "{% url "searchByDate" date %}">
+            Search By Date of Creation
+        </a>
+
+        <!-- search bar -->
+        <div style = "float: right">
+            <form action = "">
+                <input type = "text" name = "searchBy" placeholder = {{ date }} value = "{{request.GET.searchBy}}">
+                <input type = "submit" value = "Search" style = "background-color: indianred; border-color: indianred; color: aliceblue;">
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %} 
+    <div style = "padding-top: 1cm">
+        {% if tryoutList %}
+            {% for tryout in tryoutList %}
+                <!-- mengecheck tanggal pembuatan setiap soal -->
+                {% if date.strip.lower in tryout.creationDate.lower %}
+                    <div style = "background-color: indianred; margin-top: 0.5cm; border: 1cm; height: fit-content;">
+                        <a href = "{% url "tryoutDetails" tryout.id %}">
+                            <b style = "color:aliceblue; font-family: Verdana, Geneva, Tahoma, sans-serif; text-align: left; padding: 0.25cm; font-size: 100%;">
+                                {{ tryout.tryoutName }} || Questions: {{ tryout.tryoutNums }} || Category: {{ tryout.tryoutCategory }} || Date of Creation: {{ tryout.creationDate}}
+                            </b>
+                        </a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <b style = "color:aliceblue; font-family: Verdana, Geneva, Tahoma, sans-serif; text-align: left; padding: 0.125cm; font-size: 100%;">
+                No quiz to show
+            </b>
+        {% endif %}
+    </div>
+{% endblock %}
