@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    .details {
+        color: aliceblue; 
+        font-family: Verdana, Geneva, Tahoma, sans-serif; 
+        text-align: left; 
+        padding-top: 1cm;
+        height: fit-content;
+    }
+{% endblock %}
+
+{% block content %}
+    <div class = "details">
+        <h1 style = "font-size: 250%;">
+            Tryout Creation Form
+        </h1>
+
+        <form method = "POST" style = "font-size: 100%;">
+            {% csrf_token %}
+            <!-- meminta nama tryout -->
+            <div style = "padding-top: 2cm; padding-bottom: 1cm;">
+                <label>
+                    Tryout Name:
+                </label>
+                {{ creationForm.tryoutName }}
+            </div>
+
+            <!-- meminta deskripsi tryout -->
+            <div style = "padding-bottom: 1cm;">
+                <label>
+                    Tryout Description:
+                </label>
+                {{ creationForm.tryoutDesc }}
+            </div>
+
+            <!-- menampilkan daftar pilihan kategori -->
+            <div style = "padding-bottom: 1cm;">
+                <label>
+                    Tryout Category:
+                </label>
+                {{ creationForm.tryoutCategory }}
+            </div>
+
+            <input type = "submit" value = "Create">
+        </form>
+    </div>
+{% endblock %}
